@@ -299,10 +299,10 @@ footer .wrap{display:grid;gap:2.2rem}
         <p>Завдяки багаторічному досвіду, карпатській воді та фільтрації гірським кришталем HETMAN створює горілку з бездоганно м'яким і стабільним смаком.</p>
       </div>
       <ul class="q4">
-        <li><div class="q3d"><video src="media/q-spirit.mp4" poster="media/q-spirit.jpg" muted loop playsinline preload="none" aria-label="Крапля спирту над тихою гладдю"></video></div><span class="n">01</span><b>Спирт класу «Люкс»</b><span>Основа чистого й м'якого смаку.</span></li>
-        <li><div class="q3d"><video src="media/q-water.mp4" poster="media/q-water.jpg" muted loop playsinline preload="none" aria-label="Карпатські вершини над водою"></video></div><span class="n">02</span><b>Карпатська вода</b><span>З природним складом і мінеральним балансом, які роблять смак гармонійним.</span></li>
-        <li><div class="q3d"><video src="media/q-crystal.mp4" poster="media/q-crystal.jpg" muted loop playsinline preload="none" aria-label="Гірський кришталь серед деревного вугілля"></video></div><span class="n">03</span><b>Вугільна фільтрація та фільтрація гірським кришталем</b><span>Для кришталевої чистоти та бездоганної м'якості.</span></li>
-        <li><div class="q3d"><video src="media/q-flask.mp4" poster="media/q-flask.jpg" muted loop playsinline preload="none" aria-label="Лабораторна колба з горілкою"></video></div><span class="n">04</span><b>Контроль кожної партії</b><span>У власній лабораторії заводу у Львові.</span></li>
+        <li><div class="q3d"><video src="media/q-spirit.mp4" poster="media/q-spirit.jpg" muted autoplay loop playsinline disablepictureinpicture preload="none" aria-label="Крапля спирту над тихою гладдю"></video></div><span class="n">01</span><b>Спирт класу «Люкс»</b><span>Основа чистого й м'якого смаку.</span></li>
+        <li><div class="q3d"><video src="media/q-water.mp4" poster="media/q-water.jpg" muted autoplay loop playsinline disablepictureinpicture preload="none" aria-label="Карпатські вершини над водою"></video></div><span class="n">02</span><b>Карпатська вода</b><span>З природним складом і мінеральним балансом, які роблять смак гармонійним.</span></li>
+        <li><div class="q3d"><video src="media/q-crystal.mp4" poster="media/q-crystal.jpg" muted autoplay loop playsinline disablepictureinpicture preload="none" aria-label="Гірський кришталь серед деревного вугілля"></video></div><span class="n">03</span><b>Вугільна фільтрація та фільтрація гірським кришталем</b><span>Для кришталевої чистоти та бездоганної м'якості.</span></li>
+        <li><div class="q3d"><video src="media/q-flask.mp4" poster="media/q-flask.jpg" muted autoplay loop playsinline disablepictureinpicture preload="none" aria-label="Лабораторна колба з горілкою"></video></div><span class="n">04</span><b>Контроль кожної партії</b><span>У власній лабораторії заводу у Львові.</span></li>
       </ul>
     </div>
   </section>
@@ -439,9 +439,19 @@ $('menu').addEventListener('click',e=>{ if(e.target.closest('a')) $('menu').clas
 const links=[...document.querySelectorAll('.menu a')];
 const so=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)); }),{rootMargin:'-45% 0px -50% 0px'});
 document.querySelectorAll('main section[id]').forEach(s=>so.observe(s));
-/* 3D loops play only while visible (and not at all for visitors who prefer reduced motion) */
+/* 3D loops play only while visible (and not at all for visitors who prefer reduced motion).
+   Phones often refuse to start videos without a tap (iPhone in Low Power Mode, data-saver modes):
+   then the loop is swapped for an animated WebP picture, which always plays. */
 const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const qo=new IntersectionObserver(es=>es.forEach(e=>{ const v=e.target; if(e.isIntersecting&&!rm){ v.preload='auto'; v.play().catch(()=>{}); } else v.pause(); }),{threshold:.25});
+function toPicture(v){ if(!v.isConnected) return; const im=new Image(); im.src=v.src.replace(/\.mp4$/,'.webp');
+  im.alt=v.getAttribute('aria-label')||''; im.decoding='async'; im.style.cssText='width:100%;height:100%;object-fit:cover;display:block';
+  im.onload=()=>{ qo.unobserve(v); v.replaceWith(im); }; }
+function tryPlay(v){ v.preload='auto'; const p=v.play();
+  if(p&&p.catch) p.catch(()=>toPicture(v));
+  // some browsers neither play nor reject: check that time really moves
+  const t0=v.currentTime; setTimeout(()=>{ if(v.isConnected&&!v.paused&&v.currentTime>t0) return; if(v.isConnected&&v.dataset.vis==='1') toPicture(v); },2500); }
+const qo=new IntersectionObserver(es=>es.forEach(e=>{ const v=e.target; v.dataset.vis=e.isIntersecting?'1':'0';
+  if(e.isIntersecting&&!rm) tryPlay(v); else v.pause(); }),{threshold:.25});
 document.querySelectorAll('.q3d video').forEach(v=>qo.observe(v));
 /* the Kyiv video plays only while on screen; the visitor can pause it */
 const vid=$('kyiv-video'), vt=$('vtoggle'); let userPaused=matchMedia('(prefers-reduced-motion: reduce)').matches; if(userPaused) vt.textContent='Відтворити';
