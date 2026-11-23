@@ -219,13 +219,6 @@ footer .wrap{display:grid;gap:2.2rem}
 h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
 .eyebrow,.btn,.card .ing,.medals .y,.contacts .k,.notes .k,.vbar,.facts,.q4 .n{font-weight:500}
 .solid{z-index:2}
-.hero{min-height:100vh;min-height:100svh;padding:calc(88px + env(safe-area-inset-top,0px)) var(--gut) 9vh;border-top:0;
-  display:flex;flex-direction:column;align-items:center;text-align:center;
-  background:var(--bg)}
-.hero .hero-logo{width:min(440px,62vw);height:auto;margin:1vh 0 0}
-.turn{width:min(100%,560px);aspect-ratio:2/3;max-height:74vh;margin:-2vh auto 0}
-.turn video,.turn img{width:100%;height:100%;object-fit:contain;display:block;
-  -webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent 100%);mask-image:radial-gradient(closest-side,#000 62%,transparent 100%)}
 .about{width:100%;max-width:1240px;margin:4vh auto 0;text-align:left;border-top:1px solid var(--line);padding-top:3.2rem;
   display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:1.2rem clamp(28px,5vw,80px);align-items:start}
 .about .eyebrow{grid-column:1/-1;margin:0}
@@ -262,32 +255,24 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
 @media (max-width:860px){
   .about{grid-template-columns:1fr;padding-top:2.2rem}
   .about .facts{grid-column:auto}
-  .turn{max-height:58vh}
   .awards-slide{padding:10vh var(--gut);align-items:flex-end}
   .awards-slide::before{background:linear-gradient(to top,rgba(2,4,16,.95) 0%,rgba(2,4,16,.75) 55%,rgba(2,4,16,.2) 100%)}
   .awards-slide .bg{object-position:62% 30%}
 }
 @media (max-width:520px){.q4 li{padding:0 1rem 1.2rem}.q3d{margin:0 -1rem .4rem}.q4 b{font-size:.86rem}.q4 b+span{font-size:.8rem}}
 
-/* hero variants: 1 tilted, 2 straight (portrait loops), 3 a big bottle turning at the right edge of the page */
-html[data-hero="3"] .hero{position:relative;overflow:hidden}
-html[data-hero="3"] .turn{position:absolute;right:0;top:0;width:min(100vw,177.8svh);height:100svh;max-height:none;aspect-ratio:auto;margin:0}
-html[data-hero="3"] .turn video,html[data-hero="3"] .turn img{object-fit:cover;object-position:right center;
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to top,transparent 0,#000 18%);-webkit-mask-composite:source-in;
-  mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to top,transparent 0,#000 18%);mask-composite:intersect}
-html[data-hero="3"] .hero .hero-logo{position:relative;z-index:2;align-self:flex-start;width:min(560px,42vw);margin:calc(50svh - 88px - 7vw) 0 0 clamp(0px,4vw,90px)}
-html[data-hero="3"] .about{position:relative;z-index:2;margin-top:calc(50svh - 4vw)}
-.herosw{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;gap:4px;align-items:center;background:rgba(2,4,16,.86);border:1px solid var(--line);padding:6px 8px;font-family:var(--f-body);font-size:.68rem;letter-spacing:.08em;color:var(--mist)}
-.herosw a{color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:.25rem .55rem}
-.herosw a.on{background:var(--gold);color:#020410;border-color:var(--gold)}
-@media (max-width:860px){
-  html[data-hero="3"] .turn{position:relative;top:auto;right:auto;height:58svh;width:100vw;margin:2vh calc(-1 * var(--gut)) 0;align-self:stretch}
-  html[data-hero="3"] .hero .hero-logo{width:min(300px,72vw);margin:1vh 0 0;align-self:center}
-  html[data-hero="3"] .about{margin-top:2vh}
-  .herosw{left:8px;right:8px;bottom:8px;justify-content:center}
-}
+
+/* first screen: the client's bottle film full-screen, the gold wordmark in the middle */
+.hero{position:relative;z-index:2;height:100vh;height:100svh;min-height:520px;overflow:hidden;display:grid;place-items:center;background:#000}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 55% at 50% 50%,rgba(2,4,16,.66) 0%,rgba(2,4,16,.42) 60%,rgba(2,4,16,.6) 100%),linear-gradient(to bottom,rgba(2,4,16,.55) 0%,transparent 22%,transparent 70%,var(--bg) 100%)}
+.hero .hero-logo{position:relative;z-index:2;width:min(760px,74vw);height:auto;margin:0;filter:drop-shadow(0 6px 40px rgba(0,0,0,.65))}
+.hero .cue{z-index:2;text-decoration:none}
+.about-sec{padding-top:12vh}
+.about-sec .about{margin-top:0;border-top:0;padding-top:0}
+@media (max-width:860px){ .hero .hero-logo{width:min(560px,84vw)} .about-sec{padding-top:9vh} }
 </style>
-<script>(function(){ var v=(location.search.match(/[?&]hero=([123])/)||[])[1]; try{ if(v) localStorage.setItem('kyivHero',v); else v=localStorage.getItem('kyivHero'); }catch(e){} document.documentElement.dataset.hero=v||'2'; })();</script>
 </head>
 <body>
 
@@ -322,14 +307,17 @@ html[data-hero="3"] .about{position:relative;z-index:2;margin-top:calc(50svh - 4
 <img class="still" src="../3d/media/film-webp/0060.webp" alt="">
 <div class="shade" aria-hidden="true"></div>
 
-<div class="herosw" aria-label="Варіант першого екрана">Пляшка: <a href="?hero=1">під нахилом</a><a href="?hero=2">рівно</a><a href="?hero=3">з краю</a></div>
-<script>document.querySelectorAll('.herosw a').forEach(function(a){ if(a.getAttribute('href').slice(-1)===document.documentElement.dataset.hero) a.classList.add('on'); });</script>
 <main id="top">
   <!-- 1. FIRST SCREEN: logo + turning bottle, then the story across the full width -->
-  <section class="solid hero" id="hero">
+  <section class="hero" id="hero">
+    <video id="herovid" class="hero-bg" poster="media/hero-poster.jpg" muted autoplay loop playsinline disablepictureinpicture preload="auto" aria-hidden="true"></video>
+    <script>(function(){ var v=document.getElementById('herovid'); var d=Math.min(devicePixelRatio||1,2); v.src=(d*innerWidth>1100||d*innerHeight>700)?'media/hero-1080.mp4':'media/hero-540.mp4'; })();</script>
     <h1 class="sr">KYIV — горілка суперпреміум-класу від HETMAN</h1>
     <img class="hero-logo" src="../3d/media/logo.png" alt="KYIV" width="1600" height="424">
-    <div class="turn"><video id="turn" src="media/turn-2.mp4" poster="media/turn-2.jpg" muted autoplay loop playsinline disablepictureinpicture preload="auto" aria-label="Пляшка горілки KYIV обертається"></video></div><script>(function(){ var V=document.documentElement.dataset.hero, t=document.getElementById('turn'); if(V!=='2'){ t.poster='media/turn-'+V+'.jpg'; t.src='media/turn-'+V+'.mp4'; } t.dataset.alt='media/turn-'+V+'.webp'; })();</script>
+    <a class="cue" href="#about"><i></i>Гортайте</a>
+  </section>
+
+  <section class="solid about-sec">
     <div class="about" id="about">
       
       <p class="eyebrow">Про горілку</p>
@@ -348,8 +336,7 @@ html[data-hero="3"] .about{position:relative;z-index:2;margin-top:calc(50svh - 4
         <h2>Горілка, названа на честь Києва</h2>
         <p>KYIV увібрала незламний дух, культурне багатство та велич столиці України. Ручне виготовлення, декорована пляшка та металізована етикетка роблять її прикрасою будь-якого моменту — це пляшка, яку хочеться зберегти.</p>
       </div>
-      <div class="rv"><div class="media v wide"><video id="kyiv-video" src="../3d/media/film.mp4" poster="../3d/media/video-poster.jpg" muted loop playsinline preload="metadata" aria-label="Відео про Київ і горілку KYIV"></video></div>
-      <div class="vbar"><span>Відео · Київ</span><button type="button" id="vtoggle">Пауза</button></div></div>
+      <div class="rv"><div class="media v wide"><img src="../static/media/lavra.jpg" alt="Києво-Печерська лавра і герб Києва на склі пляшки KYIV" loading="lazy" width="1920" height="1080"></div></div>
     </div>
   </section>
 
@@ -525,7 +512,7 @@ const freeImg=x=>{ try{ x.close&&x.close(); }catch(e){} };
 function reveal(){ if(revealed) return; revealed=true; setTimeout(()=>$('loader').classList.add('done'),250); }
 function bar(p){ $('loadbar').style.transform=`scaleX(${Math.min(1,p)})`; }
 setTimeout(reveal,15000);
-{ const tv=document.getElementById('turn'); const go=()=>setTimeout(reveal,150); if(tv&&tv.readyState>=2) go(); else if(tv){ tv.addEventListener('loadeddata',go,{once:true}); tv.addEventListener('error',go,{once:true}); setTimeout(go,2500); } else go(); }
+{ const tv=document.getElementById('herovid'); const go=()=>setTimeout(reveal,150); if(tv&&tv.readyState>=2) go(); else if(tv){ tv.addEventListener('loadeddata',go,{once:true}); tv.addEventListener('error',go,{once:true}); setTimeout(go,2500); } else go(); }
 
 let cw=null, cwId=0; const cwCb=new Map();
 try{ cw=new Worker(URL.createObjectURL(new Blob([`onmessage=e=>{const{id,f}=e.data;createImageBitmap(f).then(b=>{f.close();postMessage({id,b},[b]);},()=>{postMessage({id,f},[f]);});}`],{type:'text/javascript'})));
@@ -696,14 +683,14 @@ function toPicture(v){ if(!v.isConnected||!v.dataset.alt) return; const im=new I
 function tryPlay(v){ v.preload='auto'; const p=v.play(); if(p&&p.catch) p.catch(()=>toPicture(v));
   const t0=v.currentTime; setTimeout(()=>{ if(!v.isConnected||(!v.paused&&v.currentTime>t0)) return; if(v.dataset.vis==='1') toPicture(v); },2500); }
 const lo2=new IntersectionObserver(es=>es.forEach(e=>{ const v=e.target; v.dataset.vis=e.isIntersecting?'1':'0'; if(e.isIntersecting&&!reduce) tryPlay(v); else v.pause(); }),{threshold:.2});
-document.querySelectorAll('.q3d video,#turn').forEach(v=>{ if(!v.dataset.alt) v.dataset.alt=v.src.replace(/\.mp4$/,'.webp'); lo2.observe(v); });
+document.querySelectorAll('.q3d video').forEach(v=>{ if(!v.dataset.alt) v.dataset.alt=v.src.replace(/\.mp4$/,'.webp'); lo2.observe(v); });
 
 /* ---------- reveals, video ---------- */
 const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{threshold:.15});
 document.querySelectorAll('.rv').forEach(r=>io.observe(r));
-const vid=$('kyiv-video'), vt=$('vtoggle'); let userPaused=reduce; if(reduce) vt.textContent='Відтворити';
-vt.onclick=()=>{ userPaused=!vid.paused; if(vid.paused){ vid.play().catch(()=>{}); vt.textContent='Пауза'; } else { vid.pause(); vt.textContent='Відтворити'; } };
-new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting&&!userPaused) vid.play().catch(()=>{}); else if(!e.isIntersecting) vid.pause(); }),{threshold:.3}).observe(vid);
+/* the first-screen film plays while it is on screen */
+const vid=$('herovid');
+new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting&&!reduce) vid.play().catch(()=>{}); else vid.pause(); }),{threshold:.05}).observe(vid);
 })();
 </script>
 
