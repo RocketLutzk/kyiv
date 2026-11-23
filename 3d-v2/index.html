@@ -268,7 +268,26 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
   .awards-slide .bg{object-position:62% 30%}
 }
 @media (max-width:520px){.q4 li{padding:0 1rem 1.2rem}.q3d{margin:0 -1rem .4rem}.q4 b{font-size:.86rem}.q4 b+span{font-size:.8rem}}
+
+/* hero variants: 1 tilted, 2 straight (portrait loops), 3 a big bottle turning at the right edge of the page */
+html[data-hero="3"] .hero{position:relative;overflow:hidden}
+html[data-hero="3"] .turn{position:absolute;right:0;top:0;width:min(100vw,177.8svh);height:100svh;max-height:none;aspect-ratio:auto;margin:0}
+html[data-hero="3"] .turn video,html[data-hero="3"] .turn img{object-fit:cover;object-position:right center;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to top,transparent 0,#000 18%);-webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent 0,#000 38%),linear-gradient(to top,transparent 0,#000 18%);mask-composite:intersect}
+html[data-hero="3"] .hero .hero-logo{position:relative;z-index:2;align-self:flex-start;width:min(560px,42vw);margin:calc(50svh - 88px - 7vw) 0 0 clamp(0px,4vw,90px)}
+html[data-hero="3"] .about{position:relative;z-index:2;margin-top:calc(50svh - 4vw)}
+.herosw{position:fixed;left:16px;bottom:16px;z-index:60;display:flex;gap:4px;align-items:center;background:rgba(2,4,16,.86);border:1px solid var(--line);padding:6px 8px;font-family:var(--f-body);font-size:.68rem;letter-spacing:.08em;color:var(--mist)}
+.herosw a{color:var(--ink);text-decoration:none;border:1px solid var(--line);padding:.25rem .55rem}
+.herosw a.on{background:var(--gold);color:#020410;border-color:var(--gold)}
+@media (max-width:860px){
+  html[data-hero="3"] .turn{position:relative;top:auto;right:auto;height:58svh;width:100vw;margin:2vh calc(-1 * var(--gut)) 0;align-self:stretch}
+  html[data-hero="3"] .hero .hero-logo{width:min(300px,72vw);margin:1vh 0 0;align-self:center}
+  html[data-hero="3"] .about{margin-top:2vh}
+  .herosw{left:8px;right:8px;bottom:8px;justify-content:center}
+}
 </style>
+<script>(function(){ var v=(location.search.match(/[?&]hero=([123])/)||[])[1]; try{ if(v) localStorage.setItem('kyivHero',v); else v=localStorage.getItem('kyivHero'); }catch(e){} document.documentElement.dataset.hero=v||'2'; })();</script>
 </head>
 <body>
 
@@ -303,12 +322,14 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
 <img class="still" src="../3d/media/film-webp/0060.webp" alt="">
 <div class="shade" aria-hidden="true"></div>
 
+<div class="herosw" aria-label="Варіант першого екрана">Пляшка: <a href="?hero=1">під нахилом</a><a href="?hero=2">рівно</a><a href="?hero=3">з краю</a></div>
+<script>document.querySelectorAll('.herosw a').forEach(function(a){ if(a.getAttribute('href').slice(-1)===document.documentElement.dataset.hero) a.classList.add('on'); });</script>
 <main id="top">
   <!-- 1. FIRST SCREEN: logo + turning bottle, then the story across the full width -->
   <section class="solid hero" id="hero">
     <h1 class="sr">KYIV — горілка суперпреміум-класу від HETMAN</h1>
     <img class="hero-logo" src="../3d/media/logo.png" alt="KYIV" width="1600" height="424">
-    <div class="turn"><video id="turn" src="media/turn.mp4" poster="media/turn.jpg" muted autoplay loop playsinline disablepictureinpicture preload="auto" aria-label="Пляшка горілки KYIV обертається"></video></div>
+    <div class="turn"><video id="turn" src="media/turn-2.mp4" poster="media/turn-2.jpg" muted autoplay loop playsinline disablepictureinpicture preload="auto" aria-label="Пляшка горілки KYIV обертається"></video></div><script>(function(){ var V=document.documentElement.dataset.hero, t=document.getElementById('turn'); if(V!=='2'){ t.poster='media/turn-'+V+'.jpg'; t.src='media/turn-'+V+'.mp4'; } t.dataset.alt='media/turn-'+V+'.webp'; })();</script>
     <div class="about" id="about">
       
       <p class="eyebrow">Про горілку</p>

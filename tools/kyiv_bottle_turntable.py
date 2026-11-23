@@ -1,10 +1,11 @@
-"""KYIV bottle turntable for the hero: 360 deg seamless loop, Cycles."""
+"""KYIV bottle turntable for the hero: 360 deg seamless loop, Cycles.
+Variants (v=1|2|3): 1 tilted, 2 straight, 3 big bottle at the right edge of a wide frame."""
 import bpy, math, sys, os, runpy
 argv = sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
 opt = dict(a.split("=") for a in argv if "=" in a)
-W=int(opt.get("w",720)); Hh=int(opt.get("h",1080)); SAMPLES=int(opt.get("samples",48)); FR=int(opt.get("frames",120))
+V=opt.get("v","2"); W=int(opt.get("w",720)); Hh=int(opt.get("h",1080)); SAMPLES=int(opt.get("samples",48)); FR=int(opt.get("frames",120))
 ONLY=[int(x) for x in opt["only"].split(",")] if "only" in opt else None
-OUT=opt.get("out","/home/claude/kyiv-3d/turn/out")
+OUT=opt.get("out","/home/claude/kyiv-3d/turn/v/"+V)
 _sv=sys.argv; sys.argv=['x']
 L=runpy.run_path('/home/claude/kyiv-3d/blender/kyiv_quality_elements.py', run_name='lib')
 sys.argv=_sv
@@ -50,18 +51,30 @@ bpy.context.view_layer.update()
 zs=[ (glass.matrix_world@v.co).z for v in glass.data.vertices]; z0,z1=min(zs),max(zs); H=z1-z0
 cut.scale=(5,5,H); cut.location=(0,0,z0+H*0.70+H/2); cut.hide_render=True; cut.display_type='WIRE'
 bo=liq.modifiers.new('Fill','BOOLEAN'); bo.operation='DIFFERENCE'; bo.object=cut
-# stage
+# stage ------------------------------------------------------------------
+# pivot: the bottle spins about its own axis inside a holder that can be tilted (variant 1)
+bpy.ops.object.empty_add(location=(0,0,0)); holder=bpy.context.object
 cz=z0+H*0.5
-cam=L['camera']((0,-H*2.35,cz+H*0.06),(0,0,cz),lens=50)
-L['area']("Key",(H*1.1,-H*1.0,cz+H*0.9),(0,0,cz),320,(1.0,0.8,0.56),size=H*0.6)
-L['area']("RimL",(-H*1.2,H*0.5,cz+H*0.3),(0,0,cz),1100,(0.45,0.6,1.0),size=H*0.15,sx=H*1.4)
-L['area']("RimR",(H*1.2,H*0.6,cz+H*0.1),(0,0,cz),800,(0.55,0.7,1.0),size=H*0.15,sx=H*1.2)
-L['area']("Top",(0,0,z1+H*1.2),(0,0,cz),110,(0.85,0.9,1.0),size=H*0.8)
-L['softbox']("SoftL",(-H*0.9,-H*0.5,cz),(0,0,cz),H*0.12,H*1.4,6,(0.75,0.85,1.0))
-L['softbox']("SoftR",(H*0.9,-H*0.4,cz),(0,0,cz),H*0.10,H*1.3,5,(1.0,0.88,0.7))
-L['softbox']("Back",(0,H*1.2,cz),(0,0,cz),H*0.9,H*1.4,0.35,(0.25,0.4,1.0))
-fl=L['grid']("Floor",H*8,2); fl.location.z=z0-0.002
-fl.data.materials.append(L['fade_surface']("Floor",H*0.8,base=(0.001,0.002,0.006),rough=0.22,spec=0.35,coat=0.0))
+root.parent=holder; root.location.z=-cz          # bottle centre sits on the holder origin
+holder.location=(0,0,0)
+if V=="1":
+    holder.rotation_euler=(math.radians(-10),math.radians(16),0)   # leaning towards the viewer, to the right
+    cam=L['camera']((-H*0.13,-H*2.2,H*0.10),(-H*0.13,0,0),lens=50)
+elif V=="2":
+    cam=L['camera']((0,-H*2.15,H*0.04),(0,0,0),lens=50)              # eye level, no floor
+else:
+    # close-up from the side of the page: big bottle, cut by the frame edge
+    # bottle at the right edge of a wide frame, partly cut by it, full height in view
+    cam=L['camera']((-H*0.80,-H*2.6,H*0.02),(-H*0.80,0,H*0.02),lens=50)
+K=H
+L['area']("Key",(K*1.1,-K*1.1,K*0.7),(0,0,0),360,(1.0,0.8,0.56),size=K*0.6)
+L['area']("RimL",(-K*1.2,K*0.55,K*0.2),(0,0,0),1300,(0.45,0.6,1.0),size=K*0.15,sx=K*1.5)
+L['area']("RimR",(K*1.2,K*0.6,0),(0,0,0),900,(0.55,0.7,1.0),size=K*0.15,sx=K*1.3)
+L['area']("Top",(0,0,K*1.6),(0,0,0),120,(0.85,0.9,1.0),size=K*0.8)
+L['area']("Bottom",(0,-K*0.3,-K*1.4),(0,0,0),180,(0.3,0.45,1.0),size=K*0.5)
+L['softbox']("SoftL",(-K*0.9,-K*0.5,0),(0,0,0),K*0.12,K*1.5,7,(0.75,0.85,1.0))
+L['softbox']("SoftR",(K*0.9,-K*0.4,0),(0,0,0),K*0.10,K*1.4,6,(1.0,0.88,0.7))
+L['softbox']("Back",(0,K*1.3,0),(0,0,0),K*0.8,K*1.5,0.6,(0.2,0.38,1.0))
 sc.cycles.max_bounces=24; sc.cycles.transmission_bounces=24; sc.cycles.transparent_max_bounces=32
 os.makedirs(OUT,exist_ok=True)
 for i in (ONLY if ONLY is not None else range(FR)):
