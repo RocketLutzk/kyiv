@@ -272,6 +272,20 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
 .about-sec{padding-top:12vh}
 .about-sec .about{margin-top:0;border-top:0;padding-top:0}
 @media (max-width:860px){ .hero .hero-logo{width:min(560px,84vw)} .about-sec{padding-top:9vh} }
+
+/* full-page photo blocks: the client's photo shoot on one half, the copy on the other */
+.full{position:relative;z-index:2;min-height:100vh;min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--bg);border-top:1px solid var(--line)}
+.full .ph{position:relative;overflow:hidden;min-height:100%}
+.full .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.full .tx{display:flex;flex-direction:column;justify-content:center;padding:12vh clamp(24px,6vw,120px);max-width:44rem}
+.full.rev .ph{order:2}
+.full .medals{margin-top:2rem}
+@media (max-width:860px){
+  .full{grid-template-columns:minmax(0,1fr);min-height:0}
+  .full .ph{height:78svh;min-height:0}
+  .full.rev .ph{order:0}
+  .full .tx{padding:9vh var(--gut) 10vh;max-width:none}
+}
 </style>
 </head>
 <body>
@@ -362,10 +376,9 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
   </section>
 
   <!-- 5. AWARDS: one slide - the label in the background, the story in a card -->
-  <section class="awards-slide" id="awards">
-    <img class="bg" src="media/awards-bg.jpg" alt="" loading="lazy" width="1920" height="1080">
-    <div class="card-aw rv">
-      <div class="media p mini"><img src="../3d/media/awards-portrait.jpg" alt="Пляшка горілки KYIV із золотими медалями WSWA Access LIVE" loading="lazy" width="900" height="1368"></div>
+  <section class="full" id="awards">
+    <div class="ph"><img src="media/awards-photo.jpg" alt="Пляшка горілки KYIV із золотою медаллю GOLD 2025" loading="lazy" width="1053" height="1600" style="object-position:50% 42%"></div>
+    <div class="tx rv">
       <p class="eyebrow">Нагороди</p>
         <h2>KYIV — визнання світу</h2>
         <p class="sub">Два роки поспіль — золото в США</p>
@@ -378,9 +391,9 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
   </section>
 
   <!-- 6. TASTE -->
-  <section class="solid" id="taste">
-    <div class="wrap split">
-      <div class="rv">
+  <section class="full rev" id="taste">
+    <div class="ph"><img src="media/taste-photo.jpg" alt="Пляшка KYIV серед гірського каміння" loading="lazy" width="1067" height="1600" style="object-position:50% 45%"></div>
+    <div class="tx rv">
       <p class="eyebrow">Смак</p>
       <h2>Смак KYIV</h2>
       <div class="notes">
@@ -390,8 +403,6 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
         <div><span class="k">Післясмак</span><span class="v">Чистий, теплий і довершений.</span></div>
       </div>
       <p>Подавати охолодженою — так смак розкривається найкраще.</p>
-    </div>
-      <div class="rv"><div class="media w"><img src="../static/media/lavra.jpg" alt="Панорама Києво-Печерської лаври на склі пляшки KYIV" loading="lazy" width="1920" height="1080"></div></div>
     </div>
   </section>
 
@@ -412,15 +423,13 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
   </section>
 
   <!-- 8. GIFT -->
-  <section class="solid" id="gift">
-    <div class="wrap split rev">
-      <div class="rv"><div class="media s"><img src="../static/media/neck.jpg" alt="Горлечко пляшки KYIV із золотим архангелом" loading="lazy" width="864" height="1080"></div></div>
-      <div class="rv">
+  <section class="full" id="gift">
+    <div class="ph"><img src="media/gift-photo.jpg" alt="Пляшка KYIV поруч із подарунковою коробкою" loading="lazy" width="1800" height="1200" style="object-position:52% 60%"></div>
+    <div class="tx rv">
       <p class="eyebrow">Подарунок</p>
       <h2>Горілка в подарунок</h2>
       <p>KYIV у вишуканій сувенірній упаковці — доречний подарунок партнерам, колегам і друзям. Українська горілка з міжнародними нагородами, яку не соромно подарувати в будь-якій країні світу.</p>
       <div class="ctas"><a class="btn primary" href="#buy">Де придбати</a></div>
-    </div>
     </div>
   </section>
 
