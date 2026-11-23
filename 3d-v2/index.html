@@ -291,6 +291,12 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
 .full .ph.cut{display:grid;place-items:center;background:radial-gradient(42% 46% at 50% 54%,rgba(60,100,230,.28),transparent 72%)}
 .full .ph.cut img{position:relative;inset:auto;width:auto;height:min(74vh,760px);max-width:82%;object-fit:contain;filter:drop-shadow(0 30px 50px rgba(0,0,0,.55))}
 @media (max-width:860px){ .full .ph.cut{height:auto;padding:12vh 0 2vh} .full .ph.cut img{height:58svh} }
+
+/* taste: vodka poured over ice, played once when the block comes into view */
+.full .ph.pour{display:grid;place-items:center;background:var(--bg)}
+.full .ph.pour video{width:auto;height:min(84vh,820px);max-width:94%;aspect-ratio:4/5;object-fit:contain;display:block;
+  -webkit-mask-image:radial-gradient(closest-side,#000 70%,transparent 100%);mask-image:radial-gradient(closest-side,#000 70%,transparent 100%)}
+@media (max-width:860px){ .full .ph.pour{height:auto;padding:4vh 0 0} .full .ph.pour video{width:100%;max-width:none;height:auto} }
 </style>
 </head>
 <body>
@@ -397,7 +403,7 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
 
   <!-- 6. TASTE -->
   <section class="full rev" id="taste">
-    <div class="ph"><img src="media/taste-photo.jpg" alt="Пляшка KYIV серед гірського каміння" loading="lazy" width="1067" height="1600" style="object-position:50% 45%"></div>
+    <div class="ph pour"><video id="pour" src="media/pour.mp4" poster="media/pour-start.jpg" muted playsinline preload="none" disablepictureinpicture aria-label="Горілка KYIV наливається в склянку з льодом"></video></div>
     <div class="tx rv">
       <p class="eyebrow">Смак</p>
       <h2>Смак KYIV</h2>
@@ -702,6 +708,13 @@ document.querySelectorAll('.q3d video').forEach(v=>{ if(!v.dataset.alt) v.datase
 /* ---------- reveals, video ---------- */
 const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }),{threshold:.15});
 document.querySelectorAll('.rv').forEach(r=>io.observe(r));
+/* taste: pour once when the glass comes into view; if the phone will not play video, show the full glass */
+(function(){ const v=document.getElementById('pour'); if(!v) return; let done=false;
+  const end=()=>{ v.removeAttribute('src'); v.load(); v.poster='media/pour-end.jpg'; };
+  if(reduce){ v.poster='media/pour-end.jpg'; return; }
+  new IntersectionObserver((es,ob)=>es.forEach(e=>{ if(!e.isIntersecting||done) return; done=true; ob.disconnect(); v.preload='auto';
+    const p=v.play(); if(p&&p.catch) p.catch(end); }),{threshold:.45}).observe(v);
+})();
 /* the first-screen film plays while it is on screen */
 const vid=$('herovid');
 new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting&&!reduce) vid.play().catch(()=>{}); else vid.pause(); }),{threshold:.05}).observe(vid);
