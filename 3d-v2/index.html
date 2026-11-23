@@ -286,6 +286,11 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
   .full.rev .ph{order:0}
   .full .tx{padding:9vh var(--gut) 10vh;max-width:none}
 }
+
+/* awards: the bottle cut out of its white backdrop, standing in a soft blue glow */
+.full .ph.cut{display:grid;place-items:center;background:radial-gradient(42% 46% at 50% 54%,rgba(60,100,230,.28),transparent 72%)}
+.full .ph.cut img{position:relative;inset:auto;width:auto;height:min(74vh,760px);max-width:82%;object-fit:contain;filter:drop-shadow(0 30px 50px rgba(0,0,0,.55))}
+@media (max-width:860px){ .full .ph.cut{height:auto;padding:12vh 0 2vh} .full .ph.cut img{height:58svh} }
 </style>
 </head>
 <body>
@@ -377,7 +382,7 @@ h1,h2,h3,.faq summary,.medals b,.contacts .v,.q4 b{font-weight:400}
 
   <!-- 5. AWARDS: one slide - the label in the background, the story in a card -->
   <section class="full rev" id="awards">
-    <div class="ph"><img src="media/awards-photo.jpg" alt="Пляшка горілки KYIV із золотою медаллю GOLD 2025" loading="lazy" width="1053" height="1600" style="object-position:50% 42%"></div>
+    <div class="ph cut"><img src="media/awards-bottle.webp" alt="Пляшка горілки KYIV із золотою медаллю GOLD 2025" loading="lazy" width="470" height="1164"></div>
     <div class="tx rv">
       <p class="eyebrow">Нагороди</p>
         <h2>KYIV — визнання світу</h2>
